@@ -4,10 +4,31 @@
 
 #include "Server.h"
 
-std::string multiply(std::string req_body)
-{
-    int number = std::stoi(req_body);
-    int result = number * 4;
+// Helper function to parse the request body (application/x-www-form-urlencoded)
+std::map<std::string, std::string> parseRequestBody(const std::string& req_body) {
+    std::map<std::string, std::string> params;
+    std::istringstream stream(req_body);
+    std::string key_value;
+
+    while (std::getline(stream, key_value, '&')) {
+        size_t pos = key_value.find('=');
+        if (pos != std::string::npos) {
+            std::string key = key_value.substr(0, pos);
+            std::string value = key_value.substr(pos + 1);
+            params[key] = value;
+        }
+    }
+
+    return params;
+}
+
+std::string multiply(std::string req_body) {
+    std::map<std::string, std::string> params = parseRequestBody(req_body);
+
+    int num1 = std::stoi(params["num1"]);
+    int num2 = std::stoi(params["num2"]);
+
+    int result = num1 * num2;
 
     std::ostringstream response_stream;
     response_stream << "HTTP/1.1 200 OK\r\n";

@@ -82,6 +82,7 @@ std::string Server::parse_http_request(const std::string& request) {
     return path;
 }
 
+
 std::string Server::serve_file(const std::string& path) {
     std::ifstream file("." + path, std::ios::binary);
     if (!file) {

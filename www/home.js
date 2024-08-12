@@ -1,19 +1,27 @@
-function sendPostRequest() {
-    const inputNumber = document.getElementById('inputNumber').value;
+async function sendPostRequest() {
+    // Parameters to send
+    const params = new URLSearchParams();
+    params.append('num1', document.getElementById("inputNumberOne").value);
+    params.append('num2', document.getElementById("inputNumberTwo").value);
 
-    fetch('http://127.0.0.1:3000/multiply', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'text/plain'
-        },
-        body: inputNumber
-    })
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById('result').innerText = 'Result: ' + data;
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            document.getElementById('result').innerText = 'An error occurred.';
+    try {
+        const response = await fetch('/multiply', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: params.toString(),
         });
+
+        // Check if the response is okay
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        // Parse the response
+        const result = await response.text();
+        document.getElementById("result").innerText = result;
+    } catch (error) {
+        console.error('Fetch error:', error);
+    }
 }
