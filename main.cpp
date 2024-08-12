@@ -5,13 +5,31 @@
 #include "Server.h"
 #include "main.h"
 
-std::string multiply(std::string req_body) {
+std::string multiplyTwo(std::string req_body) {
     std::map<std::string, std::string> params = parseRequestBody(req_body);
 
     int num1 = std::stoi(params["num1"]);
     int num2 = std::stoi(params["num2"]);
 
     int result = num1 * num2;
+
+    std::ostringstream response_stream;
+    response_stream << "HTTP/1.1 200 OK\r\n";
+    response_stream << "Content-Length: " << std::to_string(result).length() << "\r\n";
+    response_stream << "Content-Type: text/plain\r\n\r\n";
+    response_stream << result;
+
+    return response_stream.str();
+}
+
+std::string multiplyThree(std::string req_body) {
+    std::map<std::string, std::string> params = parseRequestBody(req_body);
+
+    int num1 = std::stoi(params["num1"]);
+    int num2 = std::stoi(params["num2"]);
+    int num3 = std::stoi(params["num3"]);
+
+    int result = num1 * num2 * num3;
 
     std::ostringstream response_stream;
     response_stream << "HTTP/1.1 200 OK\r\n";
@@ -32,7 +50,12 @@ int main() {
     server.route("/home.js", "/www/home.js");
     server.route("/styles.css", "/www/styles.css");
 
-    server.post("/multiply", multiply);
+    // Serve math.html
+    server.route("/math", "/www/math.html");
+    server.route("/math.js", "/www/math.js");
+
+    server.post("/multiplyTwo", multiplyTwo);
+    server.post("/multiplyThree", multiplyThree);
 
     server.run_server();
     return 0;

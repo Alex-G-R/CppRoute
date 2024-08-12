@@ -3,9 +3,10 @@ async function sendPostRequest() {
     const params = new URLSearchParams();
     params.append('num1', document.getElementById("inputNumberOne").value);
     params.append('num2', document.getElementById("inputNumberTwo").value);
+    params.append('num3', document.getElementById("inputNumberThree").value);
 
     try {
-        const response = await fetch('/multiplyTwo', {
+        const response = await fetch('/multiplyThree', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',

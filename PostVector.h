@@ -4,7 +4,6 @@
 
 #include <string>
 #include <functional>
-#include "Server.h"
 
 class PostVector {
 public:
