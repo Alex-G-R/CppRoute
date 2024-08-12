@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Web Server Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        input {
+            padding: 10px;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Simple Web Server Test</h1>
+
+<h2>Multiply a Number by 4</h2>
+<p>Enter a number to multiply by 4:</p>
+
+<input type="number" id="inputNumber" placeholder="Enter a number">
+<button onclick="sendPostRequest()">Submit</button>
+
+<h2>Result:</h2>
+<p id="result"></p>
+
+<script>
+    function sendPostRequest() {
+        const inputNumber = document.getElementById('inputNumber').value;
+
+        fetch('http://127.0.0.1:3000/multiply', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'text/plain'
+            },
+            body: inputNumber
+        })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('result').innerText = 'Result: ' + data;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('result').innerText = 'An error occurred.';
+            });
+    }
+</script>
+
+</body>
+</html>
