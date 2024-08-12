@@ -6,6 +6,12 @@ Server::Server(int P_PORT)
     this->port = P_PORT;
 }
 
+bool Server::ends_with(const std::string& str, const std::string& suffix) {
+    if (str.size() < suffix.size()) {
+        return false;
+    }
+    return std::equal(suffix.rbegin(), suffix.rend(), str.rbegin());
+}
 
 void Server::initialize_winsock() {
     WSADATA wsaData;
@@ -76,10 +82,12 @@ std::string Server::serve_file(const std::string& path) {
     file_stream << file.rdbuf();
     std::string file_content = file_stream.str();
 
+    std::string content_type = get_content_type(path);
+
     std::ostringstream response_stream;
     response_stream << "HTTP/1.1 200 OK\r\n";
     response_stream << "Content-Length: " << file_content.size() << "\r\n";
-    response_stream << "Content-Type: text/html\r\n\r\n";
+    response_stream << "Content-Type: " << content_type << "\r\n\r\n";
     response_stream << file_content;
 
     return response_stream.str();
@@ -89,18 +97,7 @@ std::string Server::handle_post_request(const std::string& request, std::functio
     size_t content_start = request.find("\r\n\r\n") + 4;
     std::string body = request.substr(content_start);
 
-    // int number = std::stoi(body); // Assuming the body contains just a number
-    // int result = number * 4;
-
-    // std::ostringstream response_stream;
-    // response_stream << "HTTP/1.1 200 OK\r\n";
-    // response_stream << "Content-Length: " << std::to_string(result).length() << "\r\n";
-    // response_stream << "Content-Type: text/plain\r\n\r\n";
-    // response_stream << result;
-
     return func(body);
-
-    // return response_stream.str();
 }
 
 void Server::run_server() {
@@ -119,20 +116,29 @@ void Server::run_server() {
 
             // Rounting
 
-            for(size_t i = 0; i < routing_vectors.size(); i++)
-            {
-                for(size_t k = 0; k < post_routes.size(); k++)
-                if(path == routing_vectors[i].route)
-                {
+            bool route_found = false;
+            for (size_t i = 0; i < routing_vectors.size(); i++) {
+                if (path == routing_vectors[i].route) {
                     response = serve_file(routing_vectors[i].file_path);
-                }
-                else if (request.find("POST "+post_routes[k].post_route) != std::string::npos) {
-                    response = handle_post_request(request, post_routes[k].handler_function);
-                } else {
-                    response = "HTTP/1.1 404 Not Found\r\n\r\nNot Found";
+                    route_found = true;
+                    break;
                 }
             }
 
+            if (!route_found) {
+                for (size_t k = 0; k < post_routes.size(); k++) {
+                    if (request.find("POST " + post_routes[k].post_route) != std::string::npos) {
+                        response = handle_post_request(request, post_routes[k].handler_function);
+                        route_found = true;
+                        break;
+                    }
+                }
+            }
+
+            // Default to serving files if no explicit route matches
+            if (!route_found) {
+                response = "HTTP/1.1 404 Not Found\r\n\r\nNot Found";
+            }
 
             send(client_socket, response.c_str(), response.length(), 0);
         }
@@ -151,4 +157,91 @@ void Server::route(std::string P_route, std::string P_file_path) {
 void Server::post(std::string P_post_route, std::function<std::string(std::string req_body)> func)
 {
     post_routes.emplace_back(PostVector(P_post_route, func));
+}
+
+std::string Server::get_content_type(const std::string& path)
+{
+    // Default to HTML
+    std::string content_type = "text/html";
+
+    if (ends_with(path, ".css")) {
+        content_type = "text/css";
+    }
+    else if (ends_with(path, ".js")) {
+        content_type = "application/javascript";
+    }
+    else if (ends_with(path, ".html") || ends_with(path, ".htm")) {
+        content_type = "text/html";
+    }
+    else if (ends_with(path, ".jpg") || ends_with(path, ".jpeg")) {
+        content_type = "image/jpeg";
+    }
+    else if (ends_with(path, ".png")) {
+        content_type = "image/png";
+    }
+    else if (ends_with(path, ".gif")) {
+        content_type = "image/gif";
+    }
+    else if (ends_with(path, ".ico")) {
+        content_type = "image/x-icon";
+    }
+    else if (ends_with(path, ".svg")) {
+        content_type = "image/svg+xml";
+    }
+    else if (ends_with(path, ".json")) {
+        content_type = "application/json";
+    }
+    else if (ends_with(path, ".xml")) {
+        content_type = "application/xml";
+    }
+    else if (ends_with(path, ".pdf")) {
+        content_type = "application/pdf";
+    }
+    else if (ends_with(path, ".zip")) {
+        content_type = "application/zip";
+    }
+    else if (ends_with(path, ".txt")) {
+        content_type = "text/plain";
+    }
+    else if (ends_with(path, ".csv")) {
+        content_type = "text/csv";
+    }
+    else if (ends_with(path, ".mp3")) {
+        content_type = "audio/mpeg";
+    }
+    else if (ends_with(path, ".mp4")) {
+        content_type = "video/mp4";
+    }
+    else if (ends_with(path, ".webm")) {
+        content_type = "video/webm";
+    }
+    else if (ends_with(path, ".ogg")) {
+        content_type = "audio/ogg";
+    }
+    else if (ends_with(path, ".wav")) {
+        content_type = "audio/wav";
+    }
+    else if (ends_with(path, ".avi")) {
+        content_type = "video/x-msvideo";
+    }
+    else if (ends_with(path, ".woff")) {
+        content_type = "font/woff";
+    }
+    else if (ends_with(path, ".woff2")) {
+        content_type = "font/woff2";
+    }
+    else if (ends_with(path, ".ttf")) {
+        content_type = "font/ttf";
+    }
+    else if (ends_with(path, ".eot")) {
+        content_type = "application/vnd.ms-fontobject";
+    }
+    else if (ends_with(path, ".otf")) {
+        content_type = "font/otf";
+    }
+    else {
+        content_type = "application/octet-stream";
+    }
+
+    return content_type;
 }

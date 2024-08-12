@@ -10,6 +10,7 @@
 #include <fstream>
 #include <sstream>
 #include <functional>
+#include <unordered_map>
 
 #include "RoutingVector.h"
 #include "PostVector.h"
@@ -29,6 +30,9 @@ private:
 
     std::vector<RoutingVector> routing_vectors;
     std::vector<PostVector> post_routes;
+
+    bool ends_with(const std::string& str, const std::string& suffix);
+    std::string get_content_type(const std::string& path);
 
     void initialize_winsock();
     SOCKET create_server_socket();

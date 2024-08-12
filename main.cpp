@@ -24,6 +24,8 @@ int main() {
     Server server{3000};
 
     server.route("/home", "/www/home.html");
+    server.route("/home.js", "/www/home.js");
+    server.route("/styles.css", "/www/styles.css");
 
     server.post("/multiply", multiply);
 
