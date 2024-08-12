@@ -162,7 +162,7 @@ void Server::post(std::string P_post_route, std::function<std::string(std::strin
 std::string Server::get_content_type(const std::string& path)
 {
     // Default to HTML
-    std::string content_type = "text/html";
+    std::string content_type;
 
     if (ends_with(path, ".css")) {
         content_type = "text/css";

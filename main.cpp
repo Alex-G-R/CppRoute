@@ -23,6 +23,8 @@ int main() {
 
     Server server{3000};
 
+    // Serve home.html and it's required external goodies
+    server.route("/", "/www/home.html");
     server.route("/home", "/www/home.html");
     server.route("/home.js", "/www/home.js");
     server.route("/styles.css", "/www/styles.css");
