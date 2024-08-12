@@ -144,11 +144,11 @@ void Server::run_server() {
     WSACleanup();
 }
 
-void Server::handle_route(RoutingVector P_route) {
-    routing_vectors.emplace_back(std::move(P_route));
+void Server::route(std::string P_route, std::string P_file_path) {
+    routing_vectors.emplace_back(RoutingVector(P_route, P_file_path));
 }
 
-void Server::handle_post(PostVector P_post_handler)
+void Server::post(std::string P_post_route, std::function<std::string(std::string req_body)> func)
 {
-    post_routes.emplace_back(std::move(P_post_handler));
+    post_routes.emplace_back(PostVector(P_post_route, func));
 }

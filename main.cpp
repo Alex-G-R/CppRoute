@@ -23,9 +23,9 @@ int main() {
 
     Server server{3000};
 
-    server.handle_route(RoutingVector("/home", "/www/home.html"));
+    server.route("/home", "/www/home.html");
 
-    server.handle_post(PostVector("/multiply", multiply));
+    server.post("/multiply", multiply);
 
     server.run_server();
     return 0;

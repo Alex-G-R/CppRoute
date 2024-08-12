@@ -21,8 +21,8 @@ class Server {
 public:
     Server(int P_PORT);
     void run_server();
-    void handle_route(RoutingVector P_route);
-    void handle_post(PostVector P_post_handler);
+    void route(std::string P_route, std::string P_file_path);
+    void post(std::string P_post_route, std::function<std::string(std::string req_body)> func);
 
 private:
     int port;
