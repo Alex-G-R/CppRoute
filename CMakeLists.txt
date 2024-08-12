@@ -10,7 +10,8 @@ add_executable(server main.cpp
         RoutingVector.cpp
         RoutingVector.h
         PostVector.cpp
-        PostVector.h)
+        PostVector.h
+        main.h)
 
 # Link with the WinSock2 library for networking
 target_link_libraries(server ws2_32)
