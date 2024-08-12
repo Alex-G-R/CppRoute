@@ -3,7 +3,6 @@
 #pragma comment(lib, "Ws2_32.lib")
 
 #include "Server.h"
-#include "RoutingVector.h"
 
 std::string multiply(std::string req_body)
 {

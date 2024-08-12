@@ -22,6 +22,10 @@ class Server {
 public:
     Server(int P_PORT);
     void run_server();
+
+    // To do? Meaby -> Don't yet know if really needed or bloaty
+    // void set_paths(std::string P_pages_path, std::string P_assets_path, std::string P_styles_path, std::string P_scripts_path);
+
     void route(std::string P_route, std::string P_file_path);
     void post(std::string P_post_route, std::function<std::string(std::string req_body)> func);
 
@@ -30,6 +34,12 @@ private:
 
     std::vector<RoutingVector> routing_vectors;
     std::vector<PostVector> post_routes;
+
+    // To do? Meaby -> Don't yet know if really needed or bloaty
+    // td::string assets_folder;
+    // td::string pages_folder;
+    // td::string scripts_folder;
+    // td::string styles_folder;
 
     bool ends_with(const std::string& str, const std::string& suffix);
     std::string get_content_type(const std::string& path);

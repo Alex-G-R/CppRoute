@@ -6,6 +6,16 @@ Server::Server(int P_PORT)
     this->port = P_PORT;
 }
 
+/* To do? Meaby -> Don't yet know if really needed or bloaty
+void Server::set_paths(std::string P_pages_path, std::string P_assets_path, std::string P_styles_path, std::string P_scripts_path)
+{
+    pages_folder = P_pages_path;
+    assets_folder = P_assets_path;
+    styles_folder = P_styles_path;
+    scripts_folder = P_scripts_path;
+}
+*/
+
 bool Server::ends_with(const std::string& str, const std::string& suffix) {
     if (str.size() < suffix.size()) {
         return false;
@@ -94,6 +104,7 @@ std::string Server::serve_file(const std::string& path) {
 }
 
 std::string Server::handle_post_request(const std::string& request, std::function<std::string(std::string req_body)> func) {
+    // std::cout << request << std::endl;
     size_t content_start = request.find("\r\n\r\n") + 4;
     std::string body = request.substr(content_start);
 
