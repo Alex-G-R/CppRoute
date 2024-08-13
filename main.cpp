@@ -3,15 +3,16 @@
 #pragma comment(lib, "Ws2_32.lib")
 
 #include "Server.h"
-#include "main.h"
+#include "headers.h"
 
-std::string multiplyTwo(std::string req_body) {
+
+std::string multiplyTwo(const std::string& req_body) {
     std::map<std::string, std::string> params = parseRequestBody(req_body);
 
-    int num1 = std::stoi(params["num1"]);
-    int num2 = std::stoi(params["num2"]);
+    const int num1 = std::stoi(params["num1"]);
+    const int num2 = std::stoi(params["num2"]);
 
-    int result = num1 * num2;
+    const int result = num1 * num2;
 
     std::ostringstream response_stream;
     response_stream << "HTTP/1.1 200 OK\r\n";
@@ -22,14 +23,14 @@ std::string multiplyTwo(std::string req_body) {
     return response_stream.str();
 }
 
-std::string multiplyThree(std::string req_body) {
+std::string multiplyThree(const std::string& req_body) {
     std::map<std::string, std::string> params = parseRequestBody(req_body);
 
-    int num1 = std::stoi(params["num1"]);
-    int num2 = std::stoi(params["num2"]);
-    int num3 = std::stoi(params["num3"]);
+    const int num1 = std::stoi(params["num1"]);
+    const int num2 = std::stoi(params["num2"]);
+    const int num3 = std::stoi(params["num3"]);
 
-    int result = num1 * num2 * num3;
+    const int result = num1 * num2 * num3;
 
     std::ostringstream response_stream;
     response_stream << "HTTP/1.1 200 OK\r\n";
@@ -72,11 +73,10 @@ std::map<std::string, std::string> parseRequestBody(const std::string& req_body)
         size_t pos = key_value.find('=');
         if (pos != std::string::npos) {
             std::string key = key_value.substr(0, pos);
-            std::string value = key_value.substr(pos + 1);
+            const std::string value = key_value.substr(pos + 1);
             params[key] = value;
         }
     }
 
     return params;
 }
-

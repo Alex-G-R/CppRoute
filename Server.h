@@ -2,9 +2,8 @@
 #ifndef SERVER_H
 #define SERVER_H
 
-#include <winsock2.h>
-#include <ws2tcpip.h>
 #include <iostream>
+#include <winsock2.h>
 #include <string>
 #include <vector>
 #include <fstream>
@@ -21,36 +20,28 @@
 
 class Server {
 public:
-    Server(int P_PORT);
+    explicit Server(int P_PORT);
     void run_server();
 
-    // To do? Meaby -> Don't yet know if really needed or bloaty
-    // void set_paths(std::string P_pages_path, std::string P_assets_path, std::string P_styles_path, std::string P_scripts_path);
-
     void route(std::string P_route, std::string P_file_path);
-    void post(std::string P_post_route, std::function<std::string(std::string req_body)> func);
+    void post(std::string P_post_route, std::function<std::string(const std::string& req_body)> func);
 
 private:
     int port;
+    bool running;
 
     std::vector<RoutingVector> routing_vectors;
     std::vector<PostVector> post_routes;
 
-    // To do? Meaby -> Don't yet know if really needed or bloaty
-    // td::string assets_folder;
-    // td::string pages_folder;
-    // td::string scripts_folder;
-    // td::string styles_folder;
+    static bool ends_with(const std::string& str, const std::string& suffix);
+    static std::string get_content_type(const std::string& path);
 
-    bool ends_with(const std::string& str, const std::string& suffix);
-    std::string get_content_type(const std::string& path);
-
-    void initialize_winsock();
-    SOCKET create_server_socket();
-    SOCKET accept_client(SOCKET server_socket);
-    std::string parse_http_request(const std::string& request);
-    std::string serve_file(const std::string& path);
-    std::string handle_post_request(const std::string& request, std::function<std::string(std::string req_body)> func);
+    static void initialize_winsock();
+    [[nodiscard]] SOCKET create_server_socket() const;
+    static SOCKET accept_client(SOCKET server_socket);
+    static std::string parse_http_request(const std::string& request);
+    static std::string serve_file(const std::string& path);
+    static std::string handle_post_request(const std::string& request, const std::function<std::string(const std::string req_body)>& func);
 };
 
 

@@ -1,20 +1,11 @@
 
 #include "Server.h"
 
-Server::Server(int P_PORT)
+Server::Server(const int P_PORT)
 {
     this->port = P_PORT;
+    running = true;
 }
-
-/* To do? Meaby -> Don't yet know if really needed or bloaty
-void Server::set_paths(std::string P_pages_path, std::string P_assets_path, std::string P_styles_path, std::string P_scripts_path)
-{
-    pages_folder = P_pages_path;
-    assets_folder = P_assets_path;
-    styles_folder = P_styles_path;
-    scripts_folder = P_scripts_path;
-}
-*/
 
 bool Server::ends_with(const std::string& str, const std::string& suffix) {
     if (str.size() < suffix.size()) {
@@ -25,27 +16,26 @@ bool Server::ends_with(const std::string& str, const std::string& suffix) {
 
 void Server::initialize_winsock() {
     WSADATA wsaData;
-    int iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
-    if (iResult != 0) {
+    if (const int iResult = WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
         std::cerr << "WSAStartup failed: " << iResult << std::endl;
         exit(1);
     }
 }
 
-SOCKET Server::create_server_socket() {
-    SOCKET server_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+SOCKET Server::create_server_socket() const {
+    const SOCKET server_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (server_socket == INVALID_SOCKET) {
         std::cerr << "Socket creation failed: " << WSAGetLastError() << std::endl;
         WSACleanup();
         exit(1);
     }
 
-    sockaddr_in server_addr;
+    sockaddr_in server_addr{};
     server_addr.sin_family = AF_INET;
     server_addr.sin_addr.s_addr = INADDR_ANY; // Bind to any available interface
     server_addr.sin_port = htons(port); // Port 3000
 
-    if (bind(server_socket, (sockaddr*)&server_addr, sizeof(server_addr)) == SOCKET_ERROR) {
+    if (bind(server_socket, reinterpret_cast<sockaddr*>(&server_addr), sizeof(server_addr)) == SOCKET_ERROR) {
         std::cerr << "Bind failed: " << WSAGetLastError() << std::endl;
         closesocket(server_socket);
         WSACleanup();
@@ -62,8 +52,8 @@ SOCKET Server::create_server_socket() {
     return server_socket;
 }
 
-SOCKET Server::accept_client(SOCKET server_socket) {
-    SOCKET client_socket = accept(server_socket, NULL, NULL);
+SOCKET Server::accept_client(const SOCKET server_socket) {
+    const SOCKET client_socket = accept(server_socket, nullptr, nullptr);
     if (client_socket == INVALID_SOCKET) {
         std::cerr << "Accept failed: " << WSAGetLastError() << std::endl;
         closesocket(server_socket);
@@ -104,20 +94,19 @@ std::string Server::serve_file(const std::string& path) {
     return response_stream.str();
 }
 
-std::string Server::handle_post_request(const std::string& request, std::function<std::string(std::string req_body)> func) {
-    // std::cout << request << std::endl;
-    size_t content_start = request.find("\r\n\r\n") + 4;
-    std::string body = request.substr(content_start);
+std::string Server::handle_post_request(const std::string& request, const std::function<std::string(const std::string req_body)>& func) {
+    const size_t content_start = request.find("\r\n\r\n") + 4;
+    const std::string body = request.substr(content_start);
 
     return func(body);
 }
 
 void Server::run_server() {
     initialize_winsock();
-    SOCKET server_socket = create_server_socket();
+    const SOCKET server_socket = create_server_socket();
 
-    while (true) {
-        SOCKET client_socket = accept_client(server_socket);
+    while (running) {
+        const SOCKET client_socket = accept_client(server_socket);
 
         char buffer[1024];
         int bytes_received = recv(client_socket, buffer, sizeof(buffer), 0);
@@ -128,19 +117,25 @@ void Server::run_server() {
 
             // Rounting
 
+            // Check for server shutdown
+            if(path == "/q")
+                running = false;
+
             bool route_found = false;
-            for (size_t i = 0; i < routing_vectors.size(); i++) {
-                if (path == routing_vectors[i].route) {
-                    response = serve_file(routing_vectors[i].file_path);
+            // Check routing_vectors
+            for (const auto& route_info : routing_vectors) {
+                if (path == route_info.route) {
+                    response = serve_file(route_info.file_path);
                     route_found = true;
                     break;
                 }
             }
 
+            // If no route was found, check post_routes
             if (!route_found) {
-                for (size_t k = 0; k < post_routes.size(); k++) {
-                    if (request.find("POST " + post_routes[k].post_route) != std::string::npos) {
-                        response = handle_post_request(request, post_routes[k].handler_function);
+                for (const auto& post_route_info : post_routes) {
+                    if (request.find("POST " + post_route_info.post_route) != std::string::npos) {
+                        response = handle_post_request(request, post_route_info.handler_function);
                         route_found = true;
                         break;
                     }
@@ -152,7 +147,7 @@ void Server::run_server() {
                 response = "HTTP/1.1 404 Not Found\r\n\r\nNot Found";
             }
 
-            send(client_socket, response.c_str(), response.length(), 0);
+            send(client_socket, response.c_str(), static_cast<int>(response.length()), 0);
         }
 
         closesocket(client_socket);
@@ -163,12 +158,12 @@ void Server::run_server() {
 }
 
 void Server::route(std::string P_route, std::string P_file_path) {
-    routing_vectors.emplace_back(RoutingVector(P_route, P_file_path));
+    routing_vectors.emplace_back(std::move(P_route), std::move(P_file_path));
 }
 
-void Server::post(std::string P_post_route, std::function<std::string(std::string req_body)> func)
+void Server::post(std::string P_post_route, std::function<std::string(const std::string& req_body)> func)
 {
-    post_routes.emplace_back(PostVector(P_post_route, func));
+    post_routes.emplace_back(std::move(P_post_route), std::move(func));
 }
 
 std::string Server::get_content_type(const std::string& path)
