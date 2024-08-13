@@ -6,14 +6,17 @@
 #include <winsock2.h>
 #include <string>
 #include <vector>
+#include <filesystem>
 #include <fstream>
 #include <sstream>
 #include <map>
+#include <regex>
 #include <functional>
 #include <unordered_map>
 
 #include "RoutingVector.h"
 #include "PostVector.h"
+#include "SessionVariable.h"
 
 // Link with Ws2_32.lib
 #pragma comment(lib, "Ws2_32.lib")
@@ -23,17 +26,29 @@ public:
     explicit Server(int P_PORT);
     void run_server();
 
+    void set_assets_routes(const std::string& P_assets_dir);
+
+    void set_views_dir(const std::string& P_views_dir);
+
     void route(std::string P_route, std::string P_file_path);
     void post(std::string P_post_route, std::function<std::string(const std::string& req_body)> func);
+
+    void add_session_variable(std::string P_name, std::string P_data_type, std::string P_value);
+
+    void render(std::string file_name);
 
 private:
     int port;
     bool running;
 
+    std::string views_dir;
+
     std::vector<RoutingVector> routing_vectors;
     std::vector<PostVector> post_routes;
+    std::vector<SessionVariable> session_variables;
 
     static bool ends_with(const std::string& str, const std::string& suffix);
+    static std::string getSubstringAfterLastChar(const std::string& input, char specialChar);
     static std::string get_content_type(const std::string& path);
 
     static void initialize_winsock();
