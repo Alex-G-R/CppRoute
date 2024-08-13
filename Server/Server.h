@@ -29,6 +29,7 @@ public:
     void set_assets_routes(const std::string& P_assets_dir);
 
     void set_views_dir(const std::string& P_views_dir);
+    void set_pages_dir(const std::string& P_pages_dir);
 
     void route(std::string P_route, std::string P_file_path);
     void post(std::string P_post_route, std::function<std::string(const std::string& req_body)> func);
@@ -41,6 +42,7 @@ private:
     int port;
     bool running;
 
+    std::string pages_dir;
     std::string views_dir;
 
     std::vector<RoutingVector> routing_vectors;

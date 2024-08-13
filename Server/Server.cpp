@@ -75,6 +75,11 @@ void Server::set_views_dir(const std::string& P_views_dir)
     views_dir = P_views_dir;
 }
 
+void Server::set_pages_dir(const std::string& P_pages_dir)
+{
+    pages_dir = P_pages_dir;
+}
+
 void Server::add_session_variable(std::string P_name, std::string P_data_type, std::string P_value)
 {
     session_variables.emplace_back(std::move(P_name), std::move(P_data_type), std::move(P_value));
@@ -141,7 +146,7 @@ void Server::render(std::string file_name) {
     std::string new_file_name = file_name.erase(file_name.length() - 5);
     new_file_name += "html";
 
-    std::ofstream outFile("./www/"+new_file_name);
+    std::ofstream outFile(pages_dir+"/"+new_file_name);
 
     // Check if the file was successfully opened
     if (!outFile) {
