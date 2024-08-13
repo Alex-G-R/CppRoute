@@ -2,9 +2,29 @@
 // Link with Ws2_32.lib
 #pragma comment(lib, "Ws2_32.lib")
 
-#include "Server.h"
-#include "headers.h"
+#include "Server/Server.h"
+#include "functions.h"
 
+int main() {
+
+    Server server{3000};
+
+    // Serve home.html and it's required external goodies
+    server.route("/", "/www/home.html");
+    server.route("/home", "/www/home.html");
+    server.route("/home.js", "/www/home.js");
+    server.route("/styles.css", "/www/styles.css");
+
+    // Serve math.html
+    server.route("/math", "/www/math.html");
+    server.route("/math.js", "/www/math.js");
+
+    server.post("/multiplyTwo", multiplyTwo);
+    server.post("/multiplyThree", multiplyThree);
+
+    server.run_server();
+    return 0;
+}
 
 std::string multiplyTwo(const std::string& req_body) {
     std::map<std::string, std::string> params = parseRequestBody(req_body);
@@ -40,28 +60,6 @@ std::string multiplyThree(const std::string& req_body) {
 
     return response_stream.str();
 }
-
-int main() {
-
-    Server server{3000};
-
-    // Serve home.html and it's required external goodies
-    server.route("/", "/www/home.html");
-    server.route("/home", "/www/home.html");
-    server.route("/home.js", "/www/home.js");
-    server.route("/styles.css", "/www/styles.css");
-
-    // Serve math.html
-    server.route("/math", "/www/math.html");
-    server.route("/math.js", "/www/math.js");
-
-    server.post("/multiplyTwo", multiplyTwo);
-    server.post("/multiplyThree", multiplyThree);
-
-    server.run_server();
-    return 0;
-}
-
 
 // Helper function to parse the request body (application/x-www-form-urlencoded)
 std::map<std::string, std::string> parseRequestBody(const std::string& req_body) {
