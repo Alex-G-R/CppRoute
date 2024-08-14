@@ -28,6 +28,24 @@ std::string Server::getSubstringAfterLastChar(const std::string& input, char spe
     }
 }
 
+// Helper function to parse the request body (application/x-www-form-urlencoded)
+std::map<std::string, std::string> Server::parseRequestBody(const std::string& req_body) {
+    std::map<std::string, std::string> params;
+    std::istringstream stream(req_body);
+    std::string key_value;
+
+    while (std::getline(stream, key_value, '&')) {
+        size_t pos = key_value.find('=');
+        if (pos != std::string::npos) {
+            std::string key = key_value.substr(0, pos);
+            const std::string value = key_value.substr(pos + 1);
+            params[key] = value;
+        }
+    }
+
+    return params;
+}
+
 void Server::initialize_winsock() {
     WSADATA wsaData;
     if (const int iResult = WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
