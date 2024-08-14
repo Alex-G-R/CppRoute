@@ -5,8 +5,8 @@
 #include "functions.h"
 
 int main() {
-
     // Start by creating a server ;)
+
     
     return 0;
 }
