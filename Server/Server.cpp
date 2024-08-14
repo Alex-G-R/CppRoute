@@ -1,7 +1,7 @@
 
 #include "Server.h"
 
-Server::Server(const int P_PORT)
+Server::Server(const int P_PORT) : db(*this)
 {
     this->port = P_PORT;
     running = true;
@@ -97,6 +97,12 @@ void Server::set_pages_dir(const std::string& P_pages_dir)
 {
     pages_dir = P_pages_dir;
 }
+
+void Server::set_databases_dir(const std::string& P_databases_dir)
+{
+    databases_dir = P_databases_dir;
+}
+
 
 void Server::add_session_variable(std::string P_name, std::string P_data_type, std::string P_value)
 {

@@ -6,13 +6,19 @@
 #include <string>
 #include <unordered_map>
 
+// Forward declare the Server class
+class Server;
+
 #include "Table.h"
 
 class Database {
 private:
     std::unordered_map<std::string, Table> tables;
+    Server& server;
 
 public:
+    explicit Database(Server& server);
+
     void createTable(const std::string& name, const std::vector<std::string>& columns);
 
     void insert(const std::string& tableName, const std::vector<std::string>& values);

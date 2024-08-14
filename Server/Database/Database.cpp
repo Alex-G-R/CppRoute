@@ -1,5 +1,8 @@
 
 #include "Database.h"
+#include "../Server.h"
+
+Database::Database(Server& server) : server(server) {}
 
 void Database::createTable(const std::string& name, const std::vector<std::string>& columns) {
     tables.emplace(name, Table(name, columns));
@@ -33,7 +36,7 @@ void Database::printTable(const std::string& tableName) const {
 }
 
 void Database::saveToFile(const std::string& filename) {
-    std::ofstream file("./databases/"+filename, std::ios::binary);
+    std::ofstream file(server.databases_dir+"/"+filename, std::ios::binary);
     for (const auto& [name, table] : tables) {
         file << name << "\n";
         file << table.serialize();
@@ -41,7 +44,7 @@ void Database::saveToFile(const std::string& filename) {
 }
 
 void Database::loadFromFile(const std::string& filename) {
-    std::ifstream file("./databases/"+filename, std::ios::binary);
+    std::ifstream file(server.databases_dir+"/"+filename, std::ios::binary);
     std::string line;
     while (std::getline(file, line)) {
         if (!line.empty()) {

@@ -34,6 +34,7 @@ public:
 
     void set_views_dir(const std::string& P_views_dir);
     void set_pages_dir(const std::string& P_pages_dir);
+    void set_databases_dir(const std::string& P_databases_dir);
 
     static std::map<std::string, std::string> parseRequestBody(const std::string& req_body);
 
@@ -50,6 +51,7 @@ private:
 
     std::string pages_dir;
     std::string views_dir;
+    std::string databases_dir;
 
     std::vector<RoutingVector> routing_vectors;
     std::vector<PostVector> post_routes;
@@ -65,6 +67,8 @@ private:
     static std::string parse_http_request(const std::string& request);
     static std::string serve_file(const std::string& path);
     static std::string handle_post_request(const std::string& request, const std::function<std::string(const std::string req_body)>& func);
+
+    friend class Database;
 };
 
 
