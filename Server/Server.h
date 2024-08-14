@@ -14,6 +14,8 @@
 #include <functional>
 #include <unordered_map>
 
+#include "Database/Database.h"
+
 #include "RoutingVector.h"
 #include "PostVector.h"
 #include "SessionVariable.h"
@@ -25,6 +27,8 @@ class Server {
 public:
     explicit Server(int P_PORT);
     void run_server();
+
+    Database db;
 
     void set_assets_routes(const std::string& P_assets_dir);
 

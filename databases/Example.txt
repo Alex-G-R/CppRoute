@@ -1,0 +1,4 @@
+Example
+id	login	password	cash	
+1	userOne	userOnePassword	7300	
+2	userTwo	userTwoPassword	50	
