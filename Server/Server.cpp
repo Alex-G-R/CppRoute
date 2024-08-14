@@ -29,7 +29,7 @@ std::string Server::getSubstringAfterLastChar(const std::string& input, char spe
 }
 
 // Helper function to parse the request body (application/x-www-form-urlencoded)
-std::map<std::string, std::string> Server::parseRequestBody(const std::string& req_body) {
+std::map<std::string, std::string> Server::parseUrlencodedRequestBody(const std::string& req_body) {
     std::map<std::string, std::string> params;
     std::istringstream stream(req_body);
     std::string key_value;

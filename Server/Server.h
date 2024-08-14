@@ -36,7 +36,7 @@ public:
     void set_pages_dir(const std::string& P_pages_dir);
     void set_databases_dir(const std::string& P_databases_dir);
 
-    static std::map<std::string, std::string> parseRequestBody(const std::string& req_body);
+    static std::map<std::string, std::string> parseUrlencodedRequestBody(const std::string& req_body);
 
     void route(std::string P_route, std::string P_file_path);
     void post(std::string P_post_route, std::function<std::string(const std::string& req_body)> func);
