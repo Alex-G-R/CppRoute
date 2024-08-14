@@ -17,7 +17,7 @@ public:
     std::vector<std::string> columns;
     std::vector<Row> rows;
 
-    Table(const std::string& name, const std::vector<std::string>& columns);
+    Table(const std::string name, const std::vector<std::string>& columns);
 
     void insertRow(const std::vector<std::string>& values);
 

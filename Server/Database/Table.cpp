@@ -1,7 +1,7 @@
 
 #include "Table.h"
 
-Table::Table(const std::string& name, const std::vector<std::string>& columns)
+Table::Table(const std::string name, const std::vector<std::string>& columns)
         : name(name), columns(columns) {}
 
 void Table::insertRow(const std::vector<std::string>& values) {

@@ -20,5 +20,5 @@ Row Row::deserialize(const std::string& str) {
     while (std::getline(iss, value, '\t')) {
         values.push_back(value);
     }
-    return Row(values);
+    return Row{values};
 }
