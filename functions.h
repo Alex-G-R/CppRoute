@@ -1,10 +1,8 @@
 
-#ifndef MAIN_H
-#define MAIN_H
+#ifndef FUNCTIONS_H
+#define FUNCTIONS_H
 
-std::map<std::string, std::string> parseRequestBody(const std::string& req_body);
+// Initialize your functions here.
 
-std::string multiplyTwo(const std::string& req_body);
-std::string multiplyThree(const std::string& req_body);
 
-#endif //MAIN_H
+#endif //FUNCTIONS_H
