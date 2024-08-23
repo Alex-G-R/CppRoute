@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CppRoute - documentation</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>CppRoute - Docs</h1>
+        <nav>
+            <ul>
+                <li><a href="#intro">Introduction</a></li>
+                <li><a href="#classes">Classes</a></li>
+                <!-- <li><a href="#functions">Functions</a></li> -->
+                <li><a href="#examples">Examples</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="intro">
+            <h2>Introduction</h2>
+            <p>Welcome to the documentation for <a href="https://github.com/Alex-G-R/CppRoute"><b>CppRoute</b></a> lightweight C++ web server framework designed for backend development. cppRoute offers robust POST request handling, flexible routing, and a built-in, text-based database. It processes content types of `application/x-www-form-urlencoded` and is designed to be low-level, allowing users to easily add custom functionality and modify the framework as needed.</p>
+            <p>This documentation covers all the essential details, including classes, functions, and examples, to help you get started with cppRoute.</p>
+            <br>
+            <i><p>Documentation is up-to-date as of August 23, 2024, but please be aware that changes may have occurred since then.</p></i>
+        </section>
+        
+
+        <section id="classes">
+            <h2>Classes</h2>
+            
+            <div class="class">
+                <h3 class="collapsible">Server</h3>
+                <div class="content">
+                    <p><strong>Description:</strong> The `Server` class is responsible for handling the core operations of your web server, including routing, handling POST requests, managing session variables, and rendering views. It also interacts with a built-in text-based database.</p>
+                    
+                    <h4>Constructor</h4>
+                    <pre><code>explicit Server(int P_PORT)</code></pre>
+                    <p><strong>Parameters:</strong></p>
+                    <ul>
+                        <li><code>P_PORT</code>: The port number on which the server will listen for incoming connections.</li>
+                    </ul>
+                    
+                    <h4>Public Methods</h4>
+                    <div class="method">
+                        <h5 class="collapsible">void run_server()</h5>
+                        <div class="content">
+                            <p><strong>Description:</strong> Starts the server and begins listening for incoming connections on the specified port.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="method">
+                        <h5 class="collapsible">void set_assets_routes(const std::string& P_assets_dir)</h5>
+                        <div class="content">
+                            <p><strong>Description:</strong> Sets the directory path for serving static assets like CSS, JavaScript, and images.</p>
+                            <p><strong>Parameters:</strong></p>
+                            <ul>
+                                <li><code>P_assets_dir</code>: The directory containing the static assets.</li>
+                            </ul>
+                        </div>
+                    </div>
+        
+                    <div class="method">
+                        <h5 class="collapsible">void set_views_dir(const std::string& P_views_dir)</h5>
+                        <div class="content">
+                            <p><strong>Description:</strong> Sets the directory path where the server will look for view templates to render.</p>
+                            <p><strong>Parameters:</strong></p>
+                            <ul>
+                                <li><code>P_views_dir</code>: The directory containing the view templates.</li>
+                            </ul>
+                        </div>
+                    </div>
+        
+                    <div class="method">
+                        <h5 class="collapsible">void set_pages_dir(const std::string& P_pages_dir)</h5>
+                        <div class="content">
+                            <p><strong>Description:</strong> Sets the directory path where the server will look for static HTML pages.</p>
+                            <p><strong>Parameters:</strong></p>
+                            <ul>
+                                <li><code>P_pages_dir</code>: The directory containing the static HTML pages.</li>
+                            </ul>
+                        </div>
+                    </div>
+        
+                    <div class="method">
+                        <h5 class="collapsible">void set_databases_dir(const std::string& P_databases_dir)</h5>
+                        <div class="content">
+                            <p><strong>Description:</strong> Sets the directory path where the server will store its text-based databases.</p>
+                            <p><strong>Parameters:</strong></p>
+                            <ul>
+                                <li><code>P_databases_dir</code>: The directory where database files will be stored.</li>
+                            </ul>
+                        </div>
+                    </div>
+        
+                    <div class="method">
+                        <h5 class="collapsible">static std::map&lt;std::string, std::string&gt;parseUrlencodedRequestBody(const std::string& req_body)</h5>
+                        <div class="content">
+                            <p><strong>Description:</strong> Parses a URL-encoded request body into a key-value map.</p>
+                            <p><strong>Parameters:</strong></p>
+                            <ul>
+                                <li><code>req_body</code>: The URL-encoded request body as a string.</li>
+                            </ul>
+                            <p><strong>Returns:</strong> A map of key-value pairs extracted from the request body.</p>
+                        </div>
+                    </div>
+        
+        
+                    <div class="method">
+                        <h5 class="collapsible">void route(std::string P_route, std::string P_file_path)</h5>
+                        <div class="content">
+                            <p><strong>Description:</strong> Defines a route for the server and associates it with a file path.</p>
+                            <p><strong>Parameters:</strong></p>
+                            <ul>
+                                <li><code>P_route</code>: The URL route to handle.</li>
+                                <li><code>P_file_path</code>: The file path to serve when the route is accessed.</li>
+                            </ul>
+                        </div>
+                    </div>
+        
+                    <div class="method">
+                        <h5 class="collapsible">void post(std::string P_post_route, std::function&lt;std::string(const std::string& req_body)&gt; func)</h5>
+                        <div class="content">
+                            <p><strong>Description:</strong> Defines a POST route for the server and associates it with a function to handle the POST request.</p>
+                            <p><strong>Parameters:</strong></p>
+                            <ul>
+                                <li><code>P_post_route</code>: The URL route to handle POST requests.</li>
+                                <li><code>func</code>: A function that takes the request body as input and returns a response.</li>
+                            </ul>
+                        </div>
+                    </div>
+        
+                    <div class="method">
+                        <h5 class="collapsible">void add_session_variable(std::string P_name, std::string P_data_type, std::string P_value)</h5>
+                        <div class="content">
+                            <p><strong>Description:</strong> Adds a session variable to the server, storing it with a specific name, data type, and value.</p>
+                            <p><strong>Parameters:</strong></p>
+                            <ul>
+                                <li><code>P_name</code>: The name of the session variable.</li>
+                                <li><code>P_data_type</code>: The data type of the session variable.</li>
+                                <li><code>P_value</code>: The initial value of the session variable.</li>
+                            </ul>
+                        </div>
+                    </div>
+        
+                    <div class="method">
+                        <h5 class="collapsible">void render(std::string file_name)</h5>
+                        <div class="content">
+                            <p><strong>Description:</strong> Renders a specified view or page by its file name.</p>
+                            <p><strong>Parameters:</strong></p>
+                            <ul>
+                                <li><code>file_name</code>: The name of the file to render.</li>
+                            </ul>
+                        </div>
+                    </div>
+        
+                    <h4>Private Methods</h4>
+                    <div class="method">
+                        <h5 class="collapsible">static bool ends_with(const std::string& str, const std::string& suffix)</h5>
+                        <div class="content">
+                            <p><strong>Description:</strong> Checks if a string ends with a given suffix.</p>
+                            <p><strong>Parameters:</strong></p>
+                            <ul>
+                                <li><code>str</code>: The string to check.</li>
+                                <li><code>suffix</code>: The suffix to look for.</li>
+                            </ul>
+                            <p><strong>Returns:</strong> <code>true</code> if the string ends with the suffix, <code>false</code> otherwise.</p>
+                        </div>
+                    </div>
+        
+                    <div class="method">
+                        <h5 class="collapsible">static std::string getSubstringAfterLastChar(const std::string& input, char specialChar)</h5>
+                        <div class="content">
+                            <p><strong>Description:</strong> Extracts the substring that occurs after the last occurrence of a specific character.</p>
+                            <p><strong>Parameters:</strong></p>
+                            <ul>
+                                <li><code>input</code>: The input string.</li>
+                                <li><code>specialChar</code>: The character after which the substring is extracted.</li>
+                            </ul>
+                            <p><strong>Returns:</strong> The substring after the last occurrence of the specified character.</p>
+                        </div>
+                    </div>
+        
+                    <div class="method">
+                        <h5 class="collapsible">static std::string get_content_type(const std::string& path)</h5>
+                        <div class="content">
+                            <p><strong>Description:</strong> Determines the content type (MIME type) based on the file extension of the provided path.</p>
+                            <p><strong>Parameters:</strong></p>
+                            <ul>
+                                <li><code>path</code>: The file path for which to determine the content type.</li>
+                            </ul>
+                            <p><strong>Returns:</strong> The content type corresponding to the file extension.</p>
+                        </div>
+                    </div>
+        
+                    <div class="method">
+                        <h5 class="collapsible">static void initialize_winsock()</h5>
+                        <div class="content">
+                            <p><strong>Description:</strong> Initializes the Winsock library, required for network operations on Windows.</p>
+                        </div>
+                    </div>
+        
+                    <div class="method">
+                        <h5 class="collapsible">SOCKET create_server_socket() const</h5>
+                        <div class="content">
+                            <p><strong>Description:</strong> Creates a server socket for accepting client connections.</p>
+                            <p><strong>Returns:</strong> A SOCKET object representing the server socket.</p>
+                        </div>
+                    </div>
+        
+                    <div class="method">
+                        <h5 class="collapsible">static SOCKET accept_client(SOCKET server_socket)</h5>
+                        <div class="content">
+                            <p><strong>Description:</strong> Accepts an incoming client connection on the server socket.</p>
+                            <p><strong>Parameters:</strong></p>
+                            <ul>
+                                <li><code>server_socket</code>: The server socket that is listening for connections.</li>
+                            </ul>
+                            <p><strong>Returns:</strong> A SOCKET object representing the accepted client connection.</p>
+                        </div>
+                    </div>
+        
+                    <div class="method">
+                        <h5 class="collapsible">static std::string parse_http_request(const std::string& request)</h5>
+                        <div class="content">
+                            <p><strong>Description:</strong> Parses an incoming HTTP request string to extract the relevant information.</p>
+                            <p><strong>Parameters:</strong></p>
+                            <ul>
+                                <li><code>request</code>: The raw HTTP request as a string.</li>
+                            </ul>
+                            <p><strong>Returns:</strong> A string containing the parsed request data.</p>
+                        </div>
+                    </div>
+        
+                    <div class="method">
+                        <h5 class="collapsible">static std::string serve_file(const std::string& path)</h5>
+                        <div class="content">
+                            <p><strong>Description:</strong> Serves the contents of a file located at the given path.</p>
+                            <p><strong>Parameters:</strong></p>
+                            <ul>
+                                <li><code>path</code>: The path to the file that will be served.</li>
+                            </ul>
+                            <p><strong>Returns:</strong> The contents of the file as a string.</p>
+                        </div>
+                    </div>
+        
+                    <div class="method">
+                        <h5 class="collapsible">static std::string handle_post_request(const std::string& request, const std::function&lt;std::string(const std::string req_body)&gt;& func)</h5>
+                        <div class="content">
+                            <p><strong>Description:</strong> Handles an incoming POST request, passing the request body to a provided handler function and returning the response.</p>
+                            <p><strong>Parameters:</strong></p>
+                            <ul>
+                                <li><code>request</code>: The raw HTTP POST request as a string.</li>
+                                <li><code>func</code>: A function that takes the request body as input and returns a response string.</li>
+                            </ul>
+                            <p><strong>Returns:</strong> The response generated by the handler function.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="class">
+                <h3 class="collapsible">RoutingVector</h3>
+                <div class="content">
+                    <p><strong>Description:</strong> The `RoutingVector` class is used to define a route in the web server, mapping a specific URL path to a corresponding file path that will be served.</p>
+                    
+                    <h4>Constructor</h4>
+                    <div class="method">
+                        <h5 class="collapsible">RoutingVector(std::string P_route, std::string P_file_path)</h5>
+                        <div class="content gray-box">
+                            <p><strong>Description:</strong> Constructs a new `RoutingVector` with the specified route and file path.</p>
+                            <p><strong>Parameters:</strong></p>
+                            <ul>
+                                <li><code>P_route</code>: The URL route that this `RoutingVector` will handle.</li>
+                                <li><code>P_file_path</code>: The file path that corresponds to the route, which will be served when the route is accessed.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <h4>Public Attributes</h4>
+                    <div class="method">
+                        <h5 class="collapsible">std::string route</h5>
+                        <div class="content gray-box">
+                            <p><strong>Description:</strong> The URL route that this `RoutingVector` is responsible for handling.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="method">
+                        <h5 class="collapsible">std::string file_path</h5>
+                        <div class="content gray-box">
+                            <p><strong>Description:</strong> The file path that will be served when the corresponding route is accessed.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="class">
+                <h3 class="collapsible">PostVector</h3>
+                <div class="content">
+                    <p><strong>Description:</strong> The `PostVector` class represents a mapping for handling POST requests. It associates a specific POST route with a handler function that processes the request body and generates a response.</p>
+                    
+                    <h4>Constructor</h4>
+                    <div class="method">
+                        <h5 class="collapsible">PostVector(std::string P_post_route, std::function<std::string(std::string req_body)> func)</h5>
+                        <div class="content gray-box">
+                            <p><strong>Description:</strong> Constructs a new `PostVector` with the specified POST route and handler function.</p>
+                            <p><strong>Parameters:</strong></p>
+                            <ul>
+                                <li><code>P_post_route</code>: The POST route that this `PostVector` will handle.</li>
+                                <li><code>func</code>: A function that takes the request body as a string and returns a response string.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <h4>Public Attributes</h4>
+                    <div class="method">
+                        <h5 class="collapsible">std::string post_route</h5>
+                        <div class="content gray-box">
+                            <p><strong>Description:</strong> The POST route that this `PostVector` is responsible for handling.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="method">
+                        <h5 class="collapsible">std::function<std::string(std::string req_body)> handler_function</h5>
+                        <div class="content gray-box">
+                            <p><strong>Description:</strong> The function used to handle POST requests. It processes the request body and returns the appropriate response as a string.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="class">
+                <h3 class="collapsible">SessionVariable</h3>
+                <div class="content">
+                    <p><strong>Description:</strong> The `SessionVariable` class represents a variable stored in the server's session, including its name, data type, and value.</p>
+                    
+                    <h4>Constructor</h4>
+                    <div class="method">
+                        <h5 class="collapsible">SessionVariable(std::string P_name, std::string P_data_type, std::string P_value)</h5>
+                        <div class="content gray-box">
+                            <p><strong>Description:</strong> Constructs a new `SessionVariable` with the specified name, data type, and value.</p>
+                            <p><strong>Parameters:</strong></p>
+                            <ul>
+                                <li><code>P_name</code>: The name of the session variable.</li>
+                                <li><code>P_data_type</code>: The data type of the session variable (e.g., string, integer).</li>
+                                <li><code>P_value</code>: The value assigned to the session variable.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <h4>Public Attributes</h4>
+                    <div class="method">
+                        <h5 class="collapsible">std::string name</h5>
+                        <div class="content gray-box">
+                            <p><strong>Description:</strong> The name of the session variable, used as its identifier within the session.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="method">
+                        <h5 class="collapsible">std::string data_type</h5>
+                        <div class="content gray-box">
+                            <p><strong>Description:</strong> The data type of the session variable, defining the type of data it holds.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="method">
+                        <h5 class="collapsible">std::string value</h5>
+                        <div class="content gray-box">
+                            <p><strong>Description:</strong> The value of the session variable, representing the data stored in the session.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="class">
+                <h3 class="collapsible">Database</h3>
+                <div class="content">
+                    <p><strong>Description:</strong> The `Database` class provides functionality for managing tables and performing database operations such as creating tables, inserting data, querying, and saving/loading data from files. It operates in conjunction with the `Server` class.</p>
+                    
+                    <h4>Constructor</h4>
+                    <div class="method">
+                        <h5 class="collapsible">Database(Server& server)</h5>
+                        <div class="content gray-box">
+                            <p><strong>Description:</strong> Constructs a new `Database` object and associates it with the given `Server` instance.</p>
+                            <p><strong>Parameters:</strong></p>
+                            <ul>
+                                <li><code>server</code>: A reference to the `Server` instance that this `Database` will interact with.</li>
+                            </ul>
+                        </div>
+                    </div>
+        
+                    <h4>Public Methods</h4>
+                    <div class="method">
+                        <h5 class="collapsible">void createTable(const std::string& name, const std::vector<std::string>& columns)</h5>
+                        <div class="content gray-box">
+                            <p><strong>Description:</strong> Creates a new table with the specified name and columns.</p>
+                            <p><strong>Parameters:</strong></p>
+                            <ul>
+                                <li><code>name</code>: The name of the table to be created.</li>
+                                <li><code>columns</code>: A vector of column names for the new table.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="method">
+                        <h5 class="collapsible">void insert(const std::string& tableName, const std::vector<std::string>& values)</h5>
+                        <div class="content gray-box">
+                            <p><strong>Description:</strong> Inserts a new row with the specified values into the specified table.</p>
+                            <p><strong>Parameters:</strong></p>
+                            <ul>
+                                <li><code>tableName</code>: The name of the table where the data will be inserted.</li>
+                                <li><code>values</code>: A vector of values to be inserted into the table.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="method">
+                        <h5 class="collapsible">Table* getTable(const std::string& tableName)</h5>
+                        <div class="content gray-box">
+                            <p><strong>Description:</strong> Retrieves a pointer to the table with the specified name.</p>
+                            <p><strong>Parameters:</strong></p>
+                            <ul>
+                                <li><code>tableName</code>: The name of the table to retrieve.</li>
+                            </ul>
+                            <p><strong>Returns:</strong> A pointer to the `Table` object if found, otherwise <code>nullptr</code>.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="method">
+                        <h5 class="collapsible">std::vector<Row> query(const std::string& tableName, std::function<bool(const Row&)> condition)</h5>
+                        <div class="content gray-box">
+                            <p><strong>Description:</strong> Queries the specified table with the given condition function and returns the rows that satisfy the condition.</p>
+                            <p><strong>Parameters:</strong></p>
+                            <ul>
+                                <li><code>tableName</code>: The name of the table to query.</li>
+                                <li><code>condition</code>: A function that takes a row and returns <code>true</code> if the row meets the condition, otherwise <code>false</code>.</li>
+                            </ul>
+                            <p><strong>Returns:</strong> A vector of `Row` objects that match the query condition.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="method">
+                        <h5 class="collapsible">void printTable(const std::string& tableName) const</h5>
+                        <div class="content gray-box">
+                            <p><strong>Description:</strong> Prints the contents of the specified table to the console.</p>
+                            <p><strong>Parameters:</strong></p>
+                            <ul>
+                                <li><code>tableName</code>: The name of the table to print.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="method">
+                        <h5 class="collapsible">void saveToFile(const std::string& filename)</h5>
+                        <div class="content gray-box">
+                            <p><strong>Description:</strong> Saves the database contents to a file.</p>
+                            <p><strong>Parameters:</strong></p>
+                            <ul>
+                                <li><code>filename</code>: The name of the file to save the database to.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="method">
+                        <h5 class="collapsible">void loadFromFile(const std::string& filename)</h5>
+                        <div class="content gray-box">
+                            <p><strong>Description:</strong> Loads the database contents from a file.</p>
+                            <p><strong>Parameters:</strong></p>
+                            <ul>
+                                <li><code>filename</code>: The name of the file to load the database from.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="class">
+                <h3 class="collapsible">Row</h3>
+                <div class="content">
+                    <p><strong>Description:</strong> The `Row` class represents a single row of data within a `Table`. It consists of a vector of values and provides methods to serialize and deserialize the row data.</p>
+                    
+                    <h4>Constructor</h4>
+                    <div class="method">
+                        <h5 class="collapsible">Row(const std::vector<std::string>& values)</h5>
+                        <div class="content gray-box">
+                            <p><strong>Description:</strong> Constructs a new `Row` object with the specified vector of values.</p>
+                            <p><strong>Parameters:</strong></p>
+                            <ul>
+                                <li><code>values</code>: A vector of strings representing the values for each column in the row.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <h4>Public Methods</h4>
+                    <div class="method">
+                        <h5 class="collapsible">std::string serialize() const</h5>
+                        <div class="content gray-box">
+                            <p><strong>Description:</strong> Serializes the `Row` object into a string format suitable for storage or transmission.</p>
+                            <p><strong>Returns:</strong> A string representation of the `Row` object.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="method">
+                        <h5 class="collapsible">static Row deserialize(const std::string& str)</h5>
+                        <div class="content gray-box">
+                            <p><strong>Description:</strong> Deserializes a string into a `Row` object.</p>
+                            <p><strong>Parameters:</strong></p>
+                            <ul>
+                                <li><code>str</code>: A string representing a serialized `Row` object.</li>
+                            </ul>
+                            <p><strong>Returns:</strong> A `Row` object constructed from the serialized string.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="class">
+                <h3 class="collapsible">Table</h3>
+                <div class="content">
+                    <p><strong>Description:</strong> The `Table` class represents a collection of rows and provides methods to manipulate and access the data within the table. It includes operations for inserting rows, selecting data, and serializing/deserializing the table.</p>
+                    
+                    <h4>Constructor</h4>
+                    <div class="method">
+                        <h5 class="collapsible">Table(const std::string name, const std::vector<std::string>& columns)</h5>
+                        <div class="content gray-box">
+                            <p><strong>Description:</strong> Constructs a new `Table` object with the specified name and column names.</p>
+                            <p><strong>Parameters:</strong></p>
+                            <ul>
+                                <li><code>name</code>: The name of the table.</li>
+                                <li><code>columns</code>: A vector of strings representing the column names for the table.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <h4>Public Methods</h4>
+                    <div class="method">
+                        <h5 class="collapsible">void insertRow(const std::vector<std::string>& values)</h5>
+                        <div class="content gray-box">
+                            <p><strong>Description:</strong> Inserts a new row into the table with the specified values. The number of values should match the number of columns in the table.</p>
+                            <p><strong>Parameters:</strong></p>
+                            <ul>
+                                <li><code>values</code>: A vector of strings representing the values to be inserted into the row.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="method">
+                        <h5 class="collapsible">std::vector<Row> select(std::function<bool(const Row&)> condition) const</h5>
+                        <div class="content gray-box">
+                            <p><strong>Description:</strong> Selects and returns rows that satisfy the given condition function.</p>
+                            <p><strong>Parameters:</strong></p>
+                            <ul>
+                                <li><code>condition</code>: A function that takes a `Row` and returns <code>true</code> if the row meets the condition, otherwise <code>false</code>.</li>
+                            </ul>
+                            <p><strong>Returns:</strong> A vector of `Row` objects that meet the condition.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="method">
+                        <h5 class="collapsible">void printTable() const</h5>
+                        <div class="content gray-box">
+                            <p><strong>Description:</strong> Prints the table's contents to the console.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="method">
+                        <h5 class="collapsible">std::string serialize() const</h5>
+                        <div class="content gray-box">
+                            <p><strong>Description:</strong> Serializes the `Table` object into a string format suitable for storage or transmission.</p>
+                            <p><strong>Returns:</strong> A string representation of the `Table` object.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="method">
+                        <h5 class="collapsible">static Table deserialize(const std::string& name, const std::string& str)</h5>
+                        <div class="content gray-box">
+                            <p><strong>Description:</strong> Deserializes a string into a `Table` object.</p>
+                            <p><strong>Parameters:</strong></p>
+                            <ul>
+                                <li><code>name</code>: The name of the table.</li>
+                                <li><code>str</code>: A string representing a serialized `Table` object.</li>
+                            </ul>
+                            <p><strong>Returns:</strong> A `Table` object constructed from the serialized string.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>            
+        </section>
+
+        <!-- section id="functions">
+            <h2>Functions</h2>
+ 
+            <div class="function">
+                <h3 class="collapsible">function_name()</h3>
+                <div class="content">
+                    <pre><code>function_name(param1: Type, param2: Type) -> ReturnType</code></pre>
+                    <p><strong>Description:</strong> This function does...</p>
+                    <p><strong>Parameters:</strong></p>
+                    <ul>
+                        <li><code>param1</code>: Description of param1.</li>
+                        <li><code>param2</code>: Description of param2.</li>
+                    </ul>
+                    <p><strong>Returns:</strong> Description of the return value.</p>
+                </div>
+            </div>
+        </section> --> 
+
+        <section id="examples">
+            <h2>Examples</h2>
+            <p>Here is how to server a simple website with a POST request:</p>
+            <div class="gray-box">
+                <pre><code>You can expect some code examples here in the future ;D</code></pre>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 CppRoute ~ Alex Grabski</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
