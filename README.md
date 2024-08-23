@@ -4,4 +4,4 @@ cppRoute is a C++ web server framework designed for easy backend development. It
 
 ## Documentation
 
-For detailed documentation on the classes and methods available in cppRoute, please visit the [full documentation](https://cpproute.ct8.pl).
+For detailed documentation on the classes and methods available in cppRoute, please visit the [full documentation](https://cpproute.ct8.pl). Or you can also find the documentation in the docs folder.
