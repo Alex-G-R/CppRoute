@@ -614,7 +614,7 @@
                 <div class="content gray-box">
                     <div class="gray-box">
                         <h2>main.cpp</h2>
-                        <pre><code class="code-wrap">
+                        <pre><code class="code-wrap" id="code-block">
                             #include "Server/Server.h"
                             #include "functions.h"
                             /* functions.h ->
@@ -731,6 +731,10 @@
         <p>&copy; 2024 CppRoute ~ Alex Grabski</p>
     </footer>
 
-    <script src="script.js"></script>
+    <script defer>
+      // JavaScript to force wrapping
+      document.getElementById('code-block').style.whiteSpace = 'pre-wrap';
+    </script>
+    <script src="script.js" defer></script>
 </body>
 </html>
