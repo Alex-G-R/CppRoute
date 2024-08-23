@@ -606,14 +606,124 @@
                     <p><strong>Returns:</strong> Description of the return value.</p>
                 </div>
             </div>
-        </section> -->
+        </section> --> 
 
         <section id="examples">
             <h2>Examples</h2>
-            <p>Here is how to create a simple website with a POST request:</p>
-            <div class="gray-box">
-                <pre><code>You can expect some code examples here in the future ;D</code></pre>
-            </div>
+                <h5 class="collapsible">How to create a simple website with a POST request:</h5>
+                <div class="content gray-box">
+                    <div class="gray-box">
+                        <h2>main.cpp</h2>
+                        <pre><code class="code-wrap">
+                            #include "Server/Server.h"
+                            #include "functions.h"
+                            /* functions.h ->
+                            
+                                #ifndef FUNCTIONS_H
+                                #define FUNCTIONS_H
+                            
+                                // Initialize your functions here.
+                            
+                                std::string multiplyThree(const std::string& req_body);
+                            
+                                #endif //FUNCTIONS_H
+                            
+                            */
+                            
+                            int main() {
+                            
+                                Server server{3000};
+                            
+                                server.set_pages_dir("./www");
+                            
+                                // Serve math.html
+                                server.route("/math", "/www/math.html");
+                                server.route("/math.js", "/www/math.js");
+                                server.post("/multiplyThree", multiplyThree);
+                            
+                                server.run_server();
+                                return 0;
+                            }
+                            
+                            
+                            std::string multiplyThree(const std::string& req_body) {
+                                std::map<std::string, std::string> params = Server::parseUrlencodedRequestBody(req_body);
+                            
+                                const int num1 = std::stoi(params["num1"]);
+                                const int num2 = std::stoi(params["num2"]);
+                                const int num3 = std::stoi(params["num3"]);
+                            
+                                const int result = num1 * num2 * num3;
+                            
+                                std::ostringstream response_stream;
+                                response_stream << "HTTP/1.1 200 OK\r\n";
+                                response_stream << "Content-Length: " << std::to_string(result).length() << "\r\n";
+                                response_stream << "Content-Type: text/plain\r\n\r\n";
+                                response_stream << result;
+                            
+                                return response_stream.str();
+                            }
+                            <h2>www/math.html</h2>
+                            &#60;!DOCTYPE html&#62;
+                            &#60;html lang="en"&#62;
+                            &#60;head&#62;
+                                &#60;meta charset="UTF-8"&#62;
+                                &#60;meta name="viewport" content="width=device-width, initial-scale=1.0"&#62;
+                                &#60;title&#62;Simple Web Server Test&#60;/title&#62;
+                            &#60;/head&#62;
+                            &#60;body&#62;
+                            
+                            &#60;h1&#62;Simple Web Server Test&#60;/h1&#62;
+                            
+                            &#60;h2>Multiply a number by another number by another number&#60;/h2>
+                            &#60;p>Enter a number to multiply:&#60;/p>
+                            
+                            &#60;input type="number" id="inputNumberOne" placeholder="Enter a number">
+                            &#60;input type="number" id="inputNumberTwo" placeholder="Enter a number">
+                            &#60;input type="number" id="inputNumberThree" placeholder="Enter a number">
+                            &#60;button onclick="sendPostRequest()">Submit&#60;/button>
+                            
+                            &#60;h2>Result:&#60;/h2>
+                            &#60;p id="result">&#60;/p>
+                            
+                            &#60;script src="math.js">
+                            &#60;/script>
+                            
+                            &#60;/body>
+                            &#60;/html>
+                            
+                            <h2>www/math.js</h2>
+                            async function sendPostRequest() {
+                                // Parameters to send
+                                const params = new URLSearchParams();
+                                params.append('num1', document.getElementById("inputNumberOne").value);
+                                params.append('num2', document.getElementById("inputNumberTwo").value);
+                                params.append('num3', document.getElementById("inputNumberThree").value);
+                            
+                                try {
+                                    const response = await fetch('/multiplyThree', {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/x-www-form-urlencoded',
+                                        },
+                                        body: params.toString(),
+                                    });
+                            
+                                    // Check if the response is okay
+                                    if (!response.ok) {
+                                        throw new Error('Network response was not ok');
+                                    }
+                            
+                                    // Parse the response
+                                    const result = await response.text();
+                                    document.getElementById("result").innerText = result;
+                                } catch (error) {
+                                    console.error('Fetch error:', error);
+                                }
+                            }
+                            </code></pre>
+                    </div>
+                </div>
         </section>
     </main>
 
