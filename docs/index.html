@@ -97,7 +97,7 @@
                     </div>
         
                     <div class="method">
-                        <h5 class="collapsible">static std::map&#60;std::string, std::string&#62; parseUrlencodedRequestBody(const std::string& req_body)</h5>
+                        <h5 class="collapsible">static std::map[std::string, std::string] parseUrlencodedRequestBody(const std::string& req_body)</h5>
                         <div class="content">
                             <p><strong>Description:</strong> Parses a URL-encoded request body into a key-value map.</p>
                             <p><strong>Parameters:</strong></p>
@@ -122,7 +122,7 @@
                     </div>
         
                     <div class="method">
-                        <h5 class="collapsible">void post(std::string P_post_route, std::function&#60;std::string(const std::string& req_body)&#62; func)</h5>
+                        <h5 class="collapsible">void post(std::string P_post_route, std::function[std::string(const std::string& req_body)] func)</h5>
                         <div class="content">
                             <p><strong>Description:</strong> Defines a POST route for the server and associates it with a function to handle the POST request.</p>
                             <p><strong>Parameters:</strong></p>
@@ -248,7 +248,7 @@
                     </div>
         
                     <div class="method">
-                        <h5 class="collapsible">static std::string handle_post_request(const std::string& request, const std::function&#60;std::string(const std::string req_body)&#62;& func)</h5>
+                        <h5 class="collapsible">static std::string handle_post_request(const std::string& request, const std::function[std::string(const std::string req_body)]& func)</h5>
                         <div class="content">
                             <p><strong>Description:</strong> Handles an incoming POST request, passing the request body to a provided handler function and returning the response.</p>
                             <p><strong>Parameters:</strong></p>
@@ -304,7 +304,7 @@
                     
                     <h4>Constructor</h4>
                     <div class="method">
-                        <h5 class="collapsible">PostVector(std::string P_post_route, std::function&#60;std::string(std::string req_body)&#62; func)</h5>
+                        <h5 class="collapsible">PostVector(std::string P_post_route, std::function[std::string(std::string req_body)] func)</h5>
                         <div class="content gray-box">
                             <p><strong>Description:</strong> Constructs a new `PostVector` with the specified POST route and handler function.</p>
                             <p><strong>Parameters:</strong></p>
@@ -324,7 +324,7 @@
                     </div>
                     
                     <div class="method">
-                        <h5 class="collapsible">std::function&#60;std::string(std::string req_body)&#62; handler_function</h5>
+                        <h5 class="collapsible">std::function[std::string(std::string req_body)] handler_function</h5>
                         <div class="content gray-box">
                             <p><strong>Description:</strong> The function used to handle POST requests. It processes the request body and returns the appropriate response as a string.</p>
                         </div>
@@ -394,7 +394,7 @@
         
                     <h4>Public Methods</h4>
                     <div class="method">
-                        <h5 class="collapsible">void createTable(const std::string& name, const std::vector&#60;std::string&#62;& columns)</h5>
+                        <h5 class="collapsible">void createTable(const std::string& name, const std::vector[std::string]& columns)</h5>
                         <div class="content gray-box">
                             <p><strong>Description:</strong> Creates a new table with the specified name and columns.</p>
                             <p><strong>Parameters:</strong></p>
@@ -406,7 +406,7 @@
                     </div>
                     
                     <div class="method">
-                        <h5 class="collapsible">void insert(const std::string& tableName, const std::vector&#60;std::string&#62;& values)</h5>
+                        <h5 class="collapsible">void insert(const std::string& tableName, const std::vector[std::string]& values)</h5>
                         <div class="content gray-box">
                             <p><strong>Description:</strong> Inserts a new row with the specified values into the specified table.</p>
                             <p><strong>Parameters:</strong></p>
@@ -430,7 +430,7 @@
                     </div>
                     
                     <div class="method">
-                        <h5 class="collapsible">std::vector&#60;Row&#62; query(const std::string& tableName, std::function&#60;bool(const Row&)&#62; condition)</h5>
+                        <h5 class="collapsible">std::vector[Row] query(const std::string& tableName, std::function[bool(const Row&)] condition)</h5>
                         <div class="content gray-box">
                             <p><strong>Description:</strong> Queries the specified table with the given condition function and returns the rows that satisfy the condition.</p>
                             <p><strong>Parameters:</strong></p>
@@ -484,7 +484,7 @@
                     
                     <h4>Constructor</h4>
                     <div class="method">
-                        <h5 class="collapsible">Row(const std::vector&#60;std::string&#62;& values)</h5>
+                        <h5 class="collapsible">Row(const std::vector[std::string]& values)</h5>
                         <div class="content gray-box">
                             <p><strong>Description:</strong> Constructs a new `Row` object with the specified vector of values.</p>
                             <p><strong>Parameters:</strong></p>
@@ -524,7 +524,7 @@
                     
                     <h4>Constructor</h4>
                     <div class="method">
-                        <h5 class="collapsible">Table(const std::string name, const std::vector&#60;std::string&#62;& columns)</h5>
+                        <h5 class="collapsible">Table(const std::string name, const std::vector[std::string]& columns)</h5>
                         <div class="content gray-box">
                             <p><strong>Description:</strong> Constructs a new `Table` object with the specified name and column names.</p>
                             <p><strong>Parameters:</strong></p>
@@ -537,7 +537,7 @@
                     
                     <h4>Public Methods</h4>
                     <div class="method">
-                        <h5 class="collapsible">void insertRow(const std::vector&#60;std::string&#62;& values)</h5>
+                        <h5 class="collapsible">void insertRow(const std::vector[std::string]& values)</h5>
                         <div class="content gray-box">
                             <p><strong>Description:</strong> Inserts a new row into the table with the specified values. The number of values should match the number of columns in the table.</p>
                             <p><strong>Parameters:</strong></p>
@@ -548,7 +548,7 @@
                     </div>
                     
                     <div class="method">
-                        <h5 class="collapsible">std::vector&#60;Row&#62; select(std::function&#60;bool(const Row&)&#62; condition) const</h5>
+                        <h5 class="collapsible">std::vector[Row] select(std::function[bool(const Row&)] condition) const</h5>
                         <div class="content gray-box">
                             <p><strong>Description:</strong> Selects and returns rows that satisfy the given condition function.</p>
                             <p><strong>Parameters:</strong></p>
@@ -647,7 +647,7 @@
                             
                             
                             std::string multiplyThree(const std::string& req_body) {
-                                std::map&#60;std::string, std::string&#62; params = Server::parseUrlencodedRequestBody(req_body);
+                                std::map[std::string, std::string] params = Server::parseUrlencodedRequestBody(req_body);
                             
                                 const int num1 = std::stoi(params["num1"]);
                                 const int num2 = std::stoi(params["num2"]);
