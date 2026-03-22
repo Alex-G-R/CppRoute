@@ -11,6 +11,14 @@ add_executable(server main.cpp
         Server/RoutingVector.h
         Server/PostVector.cpp
         Server/PostVector.h
+        Server/Database/Database.cpp
+        Server/Database/Database.h
+        Server/Database/Table.cpp
+        Server/Database/Table.h
+        Server/Database/Row.cpp
+        Server/Database/Row.h
+        Server/SessionVariable.cpp
+        Server/SessionVariable.h
         functions.h)
 
 # Link with the WinSock2 library for networking

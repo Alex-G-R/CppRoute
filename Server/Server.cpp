@@ -266,29 +266,48 @@ std::string Server::handle_post_request(const std::string& request, const std::f
 }
 
 void Server::run_server() {
+    std::cout << "[INFO] Initializing Winsock..." << std::endl;
     initialize_winsock();
+
     const SOCKET server_socket = create_server_socket();
+    if (server_socket == INVALID_SOCKET) {
+        std::cerr << "[ERROR] Failed to create server socket." << std::endl;
+        return;
+    }
+    std::cout << "[INFO] Server listening for connections..." << std::endl;
 
     while (running) {
         const SOCKET client_socket = accept_client(server_socket);
+        if (client_socket == INVALID_SOCKET) {
+            std::cerr << "[WARN] Failed to accept client connection." << std::endl;
+            continue;
+        }
+
+        std::cout << "\n[CONN] New client connected." << std::endl;
 
         char buffer[1024];
         int bytes_received = recv(client_socket, buffer, sizeof(buffer), 0);
+
         if (bytes_received > 0) {
             std::string request(buffer, bytes_received);
             std::string path = parse_http_request(request);
             std::string response;
 
-            // Rounting
+            std::cout << "[RECV] Received " << bytes_received << " bytes." << std::endl;
+            std::cout << "[PARS] Parsed Path: " << path << std::endl;
 
             // Check for server shutdown
-            if(path == "/q")
+            if (path == "/q") {
+                std::cout << "[SYSTEM] Shutdown command received." << std::endl;
                 running = false;
+            }
 
             bool route_found = false;
-            // Check routing_vectors
+
+            // Check routing_vectors (GET/Static)
             for (const auto& route_info : routing_vectors) {
                 if (path == route_info.route) {
+                    std::cout << "[ROUTE] Match found in static routes: " << route_info.route << " -> " << route_info.file_path << std::endl;
                     response = serve_file(route_info.file_path);
                     route_found = true;
                     break;
@@ -298,7 +317,9 @@ void Server::run_server() {
             // If no route was found, check post_routes
             if (!route_found) {
                 for (const auto& post_route_info : post_routes) {
-                    if (request.find("POST " + post_route_info.post_route) != std::string::npos) {
+                    std::string post_pattern = "POST " + post_route_info.post_route;
+                    if (request.find(post_pattern) != std::string::npos) {
+                        std::cout << "[ROUTE] Match found in POST routes: " << post_route_info.post_route << std::endl;
                         response = handle_post_request(request, post_route_info.handler_function);
                         route_found = true;
                         break;
@@ -306,17 +327,25 @@ void Server::run_server() {
                 }
             }
 
-            // Default to serving files if no explicit route matches
+            // Default fallback
             if (!route_found) {
+                std::cout << "[WARN] No route matched for: " << path << " (Sending 404)" << std::endl;
                 response = "HTTP/1.1 404 Not Found\r\n\r\nNot Found";
             }
 
-            send(client_socket, response.c_str(), static_cast<int>(response.length()), 0);
+            int bytes_sent = send(client_socket, response.c_str(), static_cast<int>(response.length()), 0);
+            std::cout << "[SEND] Sent " << bytes_sent << " bytes to client." << std::endl;
+        } else if (bytes_received == 0) {
+            std::cout << "[CONN] Client closed connection gracefully." << std::endl;
+        } else {
+            std::cerr << "[ERROR] recv failed with error: " << WSAGetLastError() << std::endl;
         }
 
         closesocket(client_socket);
+        std::cout << "[CONN] Socket closed." << std::endl;
     }
 
+    std::cout << "[INFO] Cleaning up and shutting down." << std::endl;
     closesocket(server_socket);
     WSACleanup();
 }
